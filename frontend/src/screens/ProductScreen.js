@@ -89,7 +89,7 @@ const ProductScreen = ({ history, match }) => {
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <FacebookShareButton 
-                    url='http://proshop.com:3000/product/5f859793e35a4c7f54fe7035'>
+                    url={`https://prosh-shop.herokuapp.com/product/${product._id}`}>
                     <FacebookIcon size={32} round={true} />
                   </FacebookShareButton>
                 </ListGroup.Item>
