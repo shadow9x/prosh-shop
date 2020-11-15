@@ -1,5 +1,6 @@
 import asyncHandler from 'express-async-handler'
 import Product from '../models/productModel.js'
+import Mongoose from 'mongoose';
 
 // @desc    Fetch all products
 // @route   GET /api/products
@@ -10,11 +11,11 @@ const getProducts = asyncHandler(async (req, res) => {
 
   const keyword = req.query.keyword
     ? {
-        name: {
-          $regex: req.query.keyword,
-          $options: 'i',
-        },
-      }
+      name: {
+        $regex: req.query.keyword,
+        $options: 'i',
+      },
+    }
     : {}
 
   const count = await Product.countDocuments({ ...keyword })
@@ -29,13 +30,18 @@ const getProducts = asyncHandler(async (req, res) => {
 // @route   GET /api/products/:id
 // @access  Public
 const getProductById = asyncHandler(async (req, res) => {
-  const product = await Product.findById(req.params.id)
-
-  if (product) {
-    res.json(product)
+  const { id } = req.params;
+  let product;
+  if (Mongoose.Types.ObjectId.isValid(id)) {
+    product = await Product.findById(id);
   } else {
-    res.status(404)
-    throw new Error('Product not found')
+    product = await Product.findOne({ slug: id });
+  }
+  if (product) {
+    res.json(product);
+  } else {
+    res.status(404);
+    throw new Error('Product not found');
   }
 })
 
@@ -80,6 +86,7 @@ const createProduct = asyncHandler(async (req, res) => {
 const updateProduct = asyncHandler(async (req, res) => {
   const {
     name,
+    slug,
     price,
     description,
     image,
@@ -92,6 +99,7 @@ const updateProduct = asyncHandler(async (req, res) => {
 
   if (product) {
     product.name = name
+    product.slug = slug
     product.price = price
     product.description = description
     product.image = image

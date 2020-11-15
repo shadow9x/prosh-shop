@@ -39,7 +39,7 @@ const ProductScreen = ({ history, match }) => {
       setComment('')
       dispatch({ type: PRODUCT_CREATE_REVIEW_RESET })
     }
-    dispatch(listProductDetails(match.params.id))
+    dispatch(listProductDetails(match.params.slug))
   }, [dispatch, match, successProductReview])
 
   const addToCartHandler = () => {
@@ -91,7 +91,7 @@ const ProductScreen = ({ history, match }) => {
                   Share:
                   <span style={{ marginLeft: '20px' }}>
                     <FacebookShareButton 
-                      url={`https://prosh-shop.herokuapp.com/product/${product._id}`}>
+                      url={`https://prosh-shop.herokuapp.com/product/${product.slug}`}>
                       <FacebookIcon size={32} round={true} />
                     </FacebookShareButton>
                   </span>
