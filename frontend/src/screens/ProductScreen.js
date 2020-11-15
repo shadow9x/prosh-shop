@@ -49,7 +49,7 @@ const ProductScreen = ({ history, match }) => {
   const submitHandler = (e) => {
     e.preventDefault()
     dispatch(
-      createProductReview(match.params.id, {
+      createProductReview(match.params.slug, {
         rating,
         comment,
       })
