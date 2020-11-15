@@ -60,7 +60,7 @@ const App = () => {
         </Container>
       </main>
       <MessengerCustomerChat
-        pageId="6716718998424372"
+        pageId="716718998424372"
         appId="679587552676993"
       />
       <Footer />
