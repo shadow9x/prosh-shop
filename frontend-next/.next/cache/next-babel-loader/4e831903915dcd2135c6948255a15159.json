@@ -1,1 +1,0 @@
-{"ast":null,"code":"import { jsx as _jsx } from \"react/jsx-runtime\";\nimport App from '../App';\n\nfunction HomePage() {\n  return /*#__PURE__*/_jsx(\"div\", {\n    children: /*#__PURE__*/_jsx(App, {})\n  });\n}\n\nexport default HomePage;","map":null,"metadata":{},"sourceType":"module"}

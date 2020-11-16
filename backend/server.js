@@ -4,6 +4,7 @@ import dotenv from 'dotenv'
 import colors from 'colors'
 import morgan from 'morgan'
 import cors from 'cors'
+import prerender from 'prerender-node'
 import { notFound, errorHandler } from './middleware/errorMiddleware.js'
 import connectDB from './config/db.js'
 
@@ -18,6 +19,7 @@ connectDB()
 
 const app = express()
 app.use(cors())
+app.use(prerender);
 
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'))
