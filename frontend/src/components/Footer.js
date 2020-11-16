@@ -9,7 +9,7 @@ const Footer = () => {
         <Row>
           <Col className='text-center py-3'>
             <Mailchimp
-              action='https://gmail.us2.list-manage.com/subscribe/post?u=2622e25d280ca90e2eb346fc0&amp;id=7e9dfce380'
+              action='https://shop.us7.list-manage.com/subscribe/post?u=32768e3115b915a86e5758d5b&amp;id=06741147e0'
               fields={[
                 {
                   name: 'EMAIL',
