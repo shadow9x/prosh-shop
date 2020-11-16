@@ -91,7 +91,7 @@ const ProductScreen = ({ history, match }) => {
                   Share:
                   <span style={{ marginLeft: '20px' }}>
                     <FacebookShareButton 
-                      url={`https://prosh.shop/product/${product.slug}`}>
+                      url={`http://prosh.shop/product/${product.slug}`}>
                       <FacebookIcon size={32} round={true} />
                     </FacebookShareButton>
                   </span>
