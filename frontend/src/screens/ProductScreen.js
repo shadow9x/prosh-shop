@@ -39,7 +39,7 @@ const ProductScreen = ({ history, match }) => {
       setComment('')
       dispatch({ type: PRODUCT_CREATE_REVIEW_RESET })
     }
-    dispatch(listProductDetails(match.params.id))
+    dispatch(listProductDetails(match.params.slug))
   }, [dispatch, match, successProductReview])
 
   const addToCartHandler = () => {
@@ -49,7 +49,7 @@ const ProductScreen = ({ history, match }) => {
   const submitHandler = (e) => {
     e.preventDefault()
     dispatch(
-      createProductReview(match.params.id, {
+      createProductReview(match.params.slug, {
         rating,
         comment,
       })
@@ -67,7 +67,7 @@ const ProductScreen = ({ history, match }) => {
         <Message variant='danger'>{error}</Message>
       ) : (
         <>
-          <Meta title={product.name} />
+          <Meta title={product.name} description={product.description} image={product.image} />
           <Row>
             <Col md={6}>
               <Image src={product.image} alt={product.name} fluid />
@@ -91,7 +91,7 @@ const ProductScreen = ({ history, match }) => {
                   Share:
                   <span style={{ marginLeft: '20px' }}>
                     <FacebookShareButton 
-                      url={`https://prosh-shop.herokuapp.com/product/${product._id}`}>
+                      url={`https://prosh.shop/product/${product.slug}`}>
                       <FacebookIcon size={32} round={true} />
                     </FacebookShareButton>
                   </span>

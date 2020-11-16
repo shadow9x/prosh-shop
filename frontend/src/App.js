@@ -33,7 +33,7 @@ const App = () => {
           <Route path='/login' component={LoginScreen} />
           <Route path='/register' component={RegisterScreen} />
           <Route path='/profile' component={ProfileScreen} />
-          <Route path='/product/:id' component={ProductScreen} />
+          <Route path='/product/:slug' component={ProductScreen} />
           <Route path='/cart/:id?' component={CartScreen} />
           <Route path='/admin/userlist' component={UserListScreen} />
           <Route path='/admin/user/:id/edit' component={UserEditScreen} />
@@ -60,8 +60,8 @@ const App = () => {
         </Container>
       </main>
       <MessengerCustomerChat
-        pageId="679587552676993"
-        appId="b11eb8e7bf4e8af7408c026fae207556"
+        pageId="716718998424372"
+        appId="679587552676993"
       />
       <Footer />
     </Router>

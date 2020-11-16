@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Form, Button } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
+import slugify from 'slugify'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 import FormContainer from '../components/FormContainer'
@@ -13,6 +14,7 @@ const ProductEditScreen = ({ match, history }) => {
   const productId = match.params.id
 
   const [name, setName] = useState('')
+  const [slug, setSlug] = useState('')
   const [price, setPrice] = useState(0)
   const [image, setImage] = useState('')
   const [brand, setBrand] = useState('')
@@ -42,6 +44,7 @@ const ProductEditScreen = ({ match, history }) => {
         dispatch(listProductDetails(productId))
       } else {
         setName(product.name)
+        setSlug(product.slug)
         setPrice(product.price)
         setImage(product.image)
         setBrand(product.brand)
@@ -81,6 +84,7 @@ const ProductEditScreen = ({ match, history }) => {
       updateProduct({
         _id: productId,
         name,
+        slug,
         price,
         image,
         brand,
@@ -113,6 +117,18 @@ const ProductEditScreen = ({ match, history }) => {
                 placeholder='Enter name'
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                onBlur={(e) => setSlug(slugify(e.target.value, { lower: true }))}
+              ></Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId='name'>
+              <Form.Label>Name</Form.Label>
+              <Form.Control
+                type='slug'
+                placeholder='Enter slug'
+                value={slug}
+                onFocus={() => setSlug(slugify(name, { lower: true }))}
+                onChange={(e) => setSlug(e.target.value)}
               ></Form.Control>
             </Form.Group>
 
