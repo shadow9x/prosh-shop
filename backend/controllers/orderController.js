@@ -1,5 +1,6 @@
 import asyncHandler from 'express-async-handler'
 import Order from '../models/orderModel.js'
+import md5 from 'md5'
 
 // @desc    Create new order
 // @route   POST /api/orders
@@ -114,6 +115,12 @@ const getOrders = asyncHandler(async (req, res) => {
   res.json(orders)
 })
 
+const getMd5Hash = function(req, res) {
+  console.log(Object.values(req.query));
+  const message = Object.values(req.query).join('');
+  res.json({hash: md5(message)})
+}
+
 export {
   addOrderItems,
   getOrderById,
@@ -121,4 +128,5 @@ export {
   updateOrderToDelivered,
   getMyOrders,
   getOrders,
+  getMd5Hash
 }
