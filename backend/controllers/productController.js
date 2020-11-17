@@ -18,6 +18,7 @@ const getProducts = asyncHandler(async (req, res) => {
     }
     : {}
 
+
   const count = await Product.countDocuments({ ...keyword })
   const products = await Product.find({ ...keyword })
     .limit(pageSize)
@@ -66,6 +67,7 @@ const deleteProduct = asyncHandler(async (req, res) => {
 const createProduct = asyncHandler(async (req, res) => {
   const product = new Product({
     name: 'Sample name',
+    slug: 'sample-name',
     price: 0,
     user: req.user._id,
     image: '/images/sample.jpg',
