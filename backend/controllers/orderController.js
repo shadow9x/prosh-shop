@@ -116,8 +116,8 @@ const getOrders = asyncHandler(async (req, res) => {
 })
 
 const getMd5Hash = function(req, res) {
-  console.log(Object.values(req.query));
-  const message = Object.values(req.query).join('');
+  const message = Object.values(req.query).filter(e => e !== '').join(' ');
+  console.log(message);
   res.json({hash: md5(message)})
 }
 

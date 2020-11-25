@@ -6,6 +6,7 @@ import { Row, Col, ListGroup, Image, Card, Button } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
+import NL_Checkout from './Checkout'
 import {
   getOrderDetails,
   payOrder,
@@ -83,6 +84,11 @@ const OrderScreen = ({ match, history }) => {
 
   const deliverHandler = () => {
     dispatch(deliverOrder(order))
+  }
+
+  const handlePayNganLuong = () => {
+    const nlCheckout = new NL_Checkout();
+    nlCheckout.processPayment(order);
   }
 
   return loading ? (
@@ -200,12 +206,15 @@ const OrderScreen = ({ match, history }) => {
                   {loadingPay && <Loader />}
                   {!sdkReady ? (
                     <Loader />
-                  ) : (
+                  ) : order.paymentMethod == 'PayPal' ? 
                     <PayPalButton
                       amount={order.totalPrice}
                       onSuccess={successPaymentHandler}
-                    />
-                  )}
+                    /> 
+                    : <Button onClick={handlePayNganLuong} type='submit' variant='primary'>
+                      Continue 
+                    </Button>
+                  }
                 </ListGroup.Item>
               )}
               {loadingDeliver && <Loader />}
