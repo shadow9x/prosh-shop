@@ -19,6 +19,10 @@ import ProductListScreen from './screens/ProductListScreen'
 import ProductEditScreen from './screens/ProductEditScreen'
 import OrderListScreen from './screens/OrderListScreen'
 import MessengerCustomerChat from 'react-messenger-customer-chat';
+import ReactGA from 'react-ga';
+
+ReactGA.initialize('184217977');
+ReactGA.pageview(window.location.pathname + window.location.search);
 
 const App = () => {
   return (
