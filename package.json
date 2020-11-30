@@ -28,11 +28,11 @@
     "morgan": "^1.10.0",
     "multer": "^1.4.2",
     "otp-generator": "^2.0.0",
-    "prerender-node": "^3.2.5"
+    "prerender-node": "^3.2.5",
+    "twilio": "^3.52.0"
   },
   "devDependencies": {
     "concurrently": "^5.3.0",
-    "nodemon": "^2.0.4",
-    "twilio": "^3.52.0"
+    "nodemon": "^2.0.4"
   }
 }
