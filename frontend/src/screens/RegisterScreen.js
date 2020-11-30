@@ -6,21 +6,25 @@ import Message from '../components/Message'
 import Loader from '../components/Loader'
 import FormContainer from '../components/FormContainer'
 import { register } from '../actions/userActions'
+import { verify } from '../actions/userActions'
 
 const RegisterScreen = ({ location, history }) => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
+  const [phone, setPhone] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+  const [otp, setOtp] = useState('')
   const [message, setMessage] = useState(null)
 
   const dispatch = useDispatch()
 
   const userRegister = useSelector((state) => state.userRegister)
-  const { loading, error, userInfo } = userRegister
+  const { loading, error, userInfo, userId } = userRegister
 
   const redirect = location.search ? location.search.split('=')[1] : '/'
 
+  
   useEffect(() => {
     if (userInfo) {
       history.push(redirect)
@@ -32,8 +36,16 @@ const RegisterScreen = ({ location, history }) => {
     if (password !== confirmPassword) {
       setMessage('Passwords do not match')
     } else {
-      dispatch(register(name, email, password))
+      dispatch(register(name, email, phone, password))
     }
+  }
+
+  const verifyOtp = () => {
+    if (!otp) {
+      alert('Please input otp number');
+      return;
+    }
+    dispatch(verify(userId._id, otp));
   }
 
   return (
@@ -63,6 +75,16 @@ const RegisterScreen = ({ location, history }) => {
           ></Form.Control>
         </Form.Group>
 
+        <Form.Group controlId='phone'>
+          <Form.Label>Phone Number</Form.Label>
+          <Form.Control
+            type='phone'
+            placeholder='Enter phone number'
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+          ></Form.Control>
+        </Form.Group>
+
         <Form.Group controlId='password'>
           <Form.Label>Password</Form.Label>
           <Form.Control
@@ -83,9 +105,22 @@ const RegisterScreen = ({ location, history }) => {
           ></Form.Control>
         </Form.Group>
 
-        <Button type='submit' variant='primary'>
+        {userId && <Form.Group controlId='otp'>
+          <Form.Label>OTP</Form.Label>
+          <Form.Control
+            type='otp'
+            placeholder='Enter otp number'
+            value={otp}
+            onChange={(e) => setOtp(e.target.value)}
+          ></Form.Control>
+        </Form.Group>}
+
+        {!userId ? <Button type='submit' variant='primary'>
           Register
         </Button>
+        : <Button variant='primary' onClick={verifyOtp}>
+          Verify
+        </Button>}
       </Form>
 
       <Row className='py-3'>

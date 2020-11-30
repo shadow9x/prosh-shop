@@ -10,6 +10,9 @@ import {
   USER_REGISTER_FAIL,
   USER_REGISTER_REQUEST,
   USER_REGISTER_SUCCESS,
+  USER_VERIFY_FAIL,
+  USER_VERIFY_REQUEST,
+  USER_VERIFY_SUCCESS,
   USER_UPDATE_PROFILE_FAIL,
   USER_UPDATE_PROFILE_REQUEST,
   USER_UPDATE_PROFILE_SUCCESS,
@@ -70,7 +73,7 @@ export const logout = () => (dispatch) => {
   dispatch({ type: USER_LIST_RESET })
 }
 
-export const register = (name, email, password) => async (dispatch) => {
+export const register = (name, email, phone,  password) => async (dispatch) => {
   try {
     dispatch({
       type: USER_REGISTER_REQUEST,
@@ -84,7 +87,7 @@ export const register = (name, email, password) => async (dispatch) => {
 
     const { data } = await axios.post(
       '/api/users',
-      { name, email, password },
+      { name, email, phone, password },
       config
     )
 
@@ -93,6 +96,38 @@ export const register = (name, email, password) => async (dispatch) => {
       payload: data,
     })
 
+  } catch (error) {
+    dispatch({
+      type: USER_REGISTER_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+export const verify = (userId, otp) => async(dispatch) => {
+  try {
+    dispatch({
+      type: USER_VERIFY_REQUEST
+    })
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+
+    const { data } = await axios.post(
+      '/api/users/verify',
+      { userId, otp },
+      config
+    )
+
+    dispatch({
+      type: USER_VERIFY_SUCCESS,
+      payload: data,
+    })
     dispatch({
       type: USER_LOGIN_SUCCESS,
       payload: data,
@@ -101,7 +136,7 @@ export const register = (name, email, password) => async (dispatch) => {
     localStorage.setItem('userInfo', JSON.stringify(data))
   } catch (error) {
     dispatch({
-      type: USER_REGISTER_FAIL,
+      type: USER_VERIFY_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

@@ -1,7 +1,16 @@
 import asyncHandler from 'express-async-handler'
 import generateToken from '../utils/generateToken.js'
 import User from '../models/userModel.js'
+import dotenv from 'dotenv'
+import Twilio from 'twilio';
+import OtpGenerator from 'otp-generator';
 
+dotenv.config();
+
+const client = Twilio(
+  process.env.TWILIO_ACCOUNT_SID,
+  process.env.TWILIO_AUTH_TOKEN
+);
 // @desc    Auth user & get token
 // @route   POST /api/users/login
 // @access  Public
@@ -25,11 +34,8 @@ const authUser = asyncHandler(async (req, res) => {
   }
 })
 
-// @desc    Register a new user
-// @route   POST /api/users
-// @access  Public
 const registerUser = asyncHandler(async (req, res) => {
-  const { name, email, password } = req.body
+  const { name, email, phone, password } = req.body
 
   const userExists = await User.findOne({ email })
 
@@ -37,24 +43,60 @@ const registerUser = asyncHandler(async (req, res) => {
     res.status(400)
     throw new Error('User already exists')
   }
+  try {
+    // generate otp
+    const otp = OtpGenerator.generate(4, { digits: true, alphabets: false, upperCase: false, specialChar: false });
+    // send otp to verify
+    await client.messages.create({
+      from: process.env.TWILIO_PHONE_NUMBER,
+      to: phone,
+      body: `Your verification code is ${otp}`
+    });
+    // create tmp user with otp and verify false
+    const user = await User.create({
+      name,
+      email,
+      phone, 
+      password,
+      verified: false,
+      otp 
+    })
 
-  const user = await User.create({
-    name,
-    email,
-    password,
-  })
+    if (user) {
+      // return success code
+      res.send(JSON.stringify({ _id: user._id }));
+    } else {
+      res.status(400)
+      throw new Error('Invalid user data')
+    }
+  } catch(err) {
+      console.log(err);
+      res.send(JSON.stringify({ success: false }));
+  };
+});
 
-  if (user) {
+// @desc    Register a new user
+// @route   POST /api/users
+// @access  Public
+const verifyUser = asyncHandler(async (req, res) => {
+  const { userId, otp } = req.body;
+  const user = await User.findById(userId);
+  if (user && otp === user.otp && !user.verified) {
+    const updateUser = await User.findById(userId);
+    if (updateUser) {
+      updateUser.verified = true;
+    }
+    const updatedUser = await updateUser.save();
     res.status(201).json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      isAdmin: user.isAdmin,
-      token: generateToken(user._id),
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      isAdmin: updatedUser.isAdmin,
+      token: generateToken(updatedUser._id),
     })
   } else {
-    res.status(400)
-    throw new Error('Invalid user data')
+    res.status(400);
+    throw new Error('Invalid user data');
   }
 })
 
@@ -179,4 +221,5 @@ export {
   deleteUser,
   getUserById,
   updateUser,
+  verifyUser
 }
